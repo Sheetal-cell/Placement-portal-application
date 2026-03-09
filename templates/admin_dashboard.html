@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h3 class="mb-4">Admin Dashboard</h3>
+
+<div class="row g-4">
+
+    <h4 class="mt-4">Pending Company Approvals</h4>
+
+<table class="table table-bordered">
+    <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Action</th>
+    </tr>
+
+    {% for company in pending_companies %}
+    <tr>
+        <td>{{ company.name }}</td>
+        <td>{{ company.email }}</td>
+        <td>
+            <a href="{{ url_for('approve_company', user_id=company.id) }}"
+               class="btn btn-success btn-sm">
+               Approve
+            </a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<h4 class="mt-4">Pending Drive Approvals</h4>
+
+<table class="table table-bordered">
+    <tr>
+        <th>Job Title</th>
+        <th>Deadline</th>
+        <th>Action</th>
+    </tr>
+
+    {% for drive in pending_drives %}
+    <tr>
+        <td>{{ drive.job_title }}</td>
+        <td>{{ drive.deadline.strftime('%Y-%m-%d') }}</td>
+        <td>
+            <a href="{{ url_for('approve_drive', drive_id=drive.id) }}"
+               class="btn btn-success btn-sm">
+               Approve
+            </a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+    <div class="col-md-3">
+        <div class="card text-center shadow-sm">
+            <div class="card-body">
+                <h5>Total Students</h5>
+                <h2>{{ students }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card text-center shadow-sm">
+            <div class="card-body">
+                <h5>Total Companies</h5>
+                <h2>{{ companies }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card text-center shadow-sm">
+            <div class="card-body">
+                <h5>Total Drives</h5>
+                <h2>{{ drives }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card text-center shadow-sm">
+            <div class="card-body">
+                <h5>Total Applications</h5>
+                <h2>{{ applications }}</h2>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

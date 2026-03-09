@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h3>Applications for "{{ drive.job_title }}"</h3>
+<p><strong>Drive Status:</strong> {{ drive.status }}</p>
+
+<hr>
+
+{% if applications %}
+
+<table class="table table-hover table-bordered align-middle">
+    <thead class="table-dark">
+        <tr>
+            <th>Application ID</th>
+            <th>Student Name</th>
+            <th>Email</th>
+            <th>Course</th>
+            <th>CGPA</th>
+            <th>Status</th>
+            <th>Update</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        {% for app in applications %}
+
+            {% set student = StudentProfile.query.get(app.student_id) %}
+            {% set user = User.query.get(student.user_id) %}
+
+            <tr>
+                <td>{{ app.id }}</td>
+                <td>{{ user.name }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ student.course }}</td>
+                <td>{{ student.cgpa }}</td>
+                <td>
+                    <td>
+    <span class="badge bg-primary">{{ app.status }}</span>
+</td>
+                </td>
+                <td>
+
+                    <a href="{{ url_for('update_status', app_id=app.id, new_status='Shortlisted') }}"
+                       class="btn btn-sm btn-warning">
+                       Shortlist
+                    </a>
+
+                    <a href="{{ url_for('update_status', app_id=app.id, new_status='Selected') }}"
+                       class="btn btn-sm btn-success">
+                       Select
+                    </a>
+
+                    <a href="{{ url_for('update_status', app_id=app.id, new_status='Rejected') }}"
+                       class="btn btn-sm btn-danger">
+                       Reject
+                    </a>
+
+                </td>
+            </tr>
+
+        {% endfor %}
+
+    </tbody>
+</table>
+
+{% else %}
+    <div class="alert alert-info">
+        No applications received yet.
+    </div>
+{% endif %}
+
+<a href="{{ url_for('company_dashboard') }}" class="btn btn-secondary mt-3">
+    Back to Dashboard
+</a>
+
+{% endblock %}
