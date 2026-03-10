@@ -55,16 +55,16 @@
                     {% for app in applications %}
                     {% set drive = app.drive %}
                     <tr>
-                        <td>{{ drive.job_title }}</td>
-                        <td>{{ app.application_date.strftime('%d %b %Y') }}</td>
+                        <td>{{drive.job_title}}</td>
+                        <td>{{app.application_date.strftime('%d %b %Y')}}</td>
                         <td>
                             {%if app.status=="Applied"%}
                                 <span class="badge bg-primary">Applied</span>
                             {%elif app.status=="Shortlisted"%}
                                 <span class="badge bg-warning text-dark">Shortlisted</span>
-                            {% elif app.status == "Selected" %}
+                            {% elif app.status=="Selected" %}
                                 <span class="badge bg-success">Selected</span>
-                            {% elif app.status == "Rejected" %}
+                            {% elif app.status=="Rejected" %}
                                 <span class="badge bg-danger">Rejected</span>
                             {% else %}
                                 <span class="badge bg-secondary">{{ app.status }}</span>

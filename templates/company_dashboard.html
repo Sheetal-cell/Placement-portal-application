@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h3>Company Dashboard</h3>
+<h3>Company's Dashboard</h3>
 
 <a href="{{ url_for('create_drive') }}" class="btn btn-primary mb-3">Create Drive</a>
 
-<h4>Your Drives</h4>
+<h4>View Your Drives</h4>
 
 {% for drive in drives %}
     <div class="card mb-2 p-2">
@@ -13,7 +13,7 @@
         Status: {{ drive.status }}
     </div>
 {% else %}
-    <p>No Drives Created</p>
+    <p>You have not created any drives yet.</p>
 {% endfor %}
 
 <a href="{{ url_for('logout') }}" class="btn btn-danger mt-3">Logout</a>

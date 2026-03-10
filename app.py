@@ -13,13 +13,12 @@ db.init_app(app)
 login_manager.init_app(app)
 login_manager.login_view = "login"
 
-# -------------------------
-# Create Database Tables
-# -------------------------
+# Creation of Database Tables
+
 with app.app_context():
     db.create_all()
 
-    # Create Admin if not exists
+# if admin is not there:
     if not User.query.filter_by(role="admin").first():
         admin = User(
             name="Admin",
@@ -32,25 +31,19 @@ with app.app_context():
         db.session.commit()
 
 
-# -------------------------
-# USER LOADER
-# -------------------------
+#load user
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
 
 
-# -------------------------
-# HOME
-# -------------------------
+#home section
 @app.route("/")
 def index():
     return render_template("index.html")
 
 
-# -------------------------
-# LOGIN
-# -------------------------
+#login section
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
@@ -75,9 +68,7 @@ def login():
     return render_template("login.html")
 
 
-# -------------------------
-# LOGOUT
-# -------------------------
+#logging out
 @app.route("/logout")
 @login_required
 def logout():
@@ -85,14 +76,12 @@ def logout():
     return redirect(url_for("index"))
 
 
-# -------------------------
-# REGISTER STUDENT
-# -------------------------
+#student registration
 @app.route("/register/student", methods=["GET", "POST"])
 def register_student():
     if request.method == "POST":
 
-        # ✅ CHECK IF EMAIL ALREADY EXISTS
+        #verify existing email
         existing_user = User.query.filter_by(
             email=request.form["email"]
         ).first()
@@ -101,7 +90,7 @@ def register_student():
             flash("Email already registered. Please login.")
             return redirect(url_for("register_student"))
 
-        # Create user
+        #creating user
         user = User(
             name=request.form["name"],
             email=request.form["email"],
@@ -112,7 +101,7 @@ def register_student():
         db.session.add(user)
         db.session.commit()
 
-        # Create student profile
+        #student profile
         student = StudentProfile(
             user_id=user.id,
             course=request.form["course"],
@@ -131,7 +120,7 @@ def register_student():
 def register_company():
     if request.method == "POST":
 
-        # 🔎 CHECK IF EMAIL ALREADY EXISTS
+        #verify existing email
         existing_user = User.query.filter_by(
             email=request.form["email"]
         ).first()
@@ -166,9 +155,7 @@ def register_company():
     return render_template("register_company.html")
 
 
-# -------------------------
-# ADMIN DASHBOARD
-# -------------------------
+#admin
 @app.route("/admin")
 @login_required
 def admin_dashboard():
@@ -196,9 +183,7 @@ def admin_dashboard():
                            applications=applications,
                            pending_companies=pending_companies,
                            pending_drives=pending_drives)
-# -------------------------
-# APPROVE COMPANY
-# -------------------------
+#company approval
 @app.route("/approve_company/<int:user_id>")
 @login_required
 def approve_company(user_id):
@@ -228,9 +213,7 @@ def approve_drive(drive_id):
     flash("Drive approved successfully.")
     return redirect(url_for("admin_dashboard"))
 
-# -------------------------
-# COMPANY DASHBOARD
-# -------------------------
+#company dashboard
 @app.route("/company")
 @login_required
 def company_dashboard():
@@ -241,9 +224,7 @@ def company_dashboard():
     return render_template("company_dashboard.html", drives=drives)
 
 
-# -------------------------
-# CREATE DRIVE
-# -------------------------
+#drive creation
 @app.route("/create_drive", methods=["GET", "POST"])
 @login_required
 def create_drive():
@@ -268,9 +249,7 @@ def create_drive():
     return render_template("create_drive.html")
 
 
-# -------------------------
-# VIEW APPLICATIONS (COMPANY)
-# -------------------------
+#company views applications
 @app.route("/view_applications/<int:drive_id>")
 @login_required
 def view_applications(drive_id):
@@ -286,10 +265,7 @@ def view_applications(drive_id):
                            User=User,
                            StudentProfile=StudentProfile)
 
-
-# -------------------------
-# UPDATE APPLICATION STATUS
-# -------------------------
+#application status update
 @app.route("/update_status/<int:app_id>/<new_status>")
 @login_required
 def update_status(app_id, new_status):
@@ -304,9 +280,7 @@ def update_status(app_id, new_status):
                             drive_id=application.drive_id))
 
 
-# -------------------------
-# STUDENT DASHBOARD
-# -------------------------
+#student dashboard
 @app.route("/student")
 @login_required
 def student_dashboard():
@@ -321,9 +295,7 @@ def student_dashboard():
                            applications=applications)
 
 
-# -------------------------
-# APPLY FOR DRIVE
-# -------------------------
+#drive application
 @app.route("/apply/<int:drive_id>")
 @login_required
 def apply(drive_id):
@@ -352,8 +324,6 @@ def apply(drive_id):
     return redirect(url_for("student_dashboard"))
 
 
-# -------------------------
-# RUN APP
-# -------------------------
+#final app run
 if __name__ == "__main__":
     app.run(debug=True)

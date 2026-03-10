@@ -28,14 +28,14 @@
             {% set user = User.query.get(student.user_id) %}
 
             <tr>
-                <td>{{ app.id }}</td>
-                <td>{{ user.name }}</td>
-                <td>{{ user.email }}</td>
-                <td>{{ student.course }}</td>
-                <td>{{ student.cgpa }}</td>
+                <td>{{app.id}}</td>
+                <td>{{user.name}}</td>
+                <td>{{user.email}}</td>
+                <td>{{student.course}}</td>
+                <td>{{student.cgpa}}</td>
                 <td>
                     <td>
-    <span class="badge bg-primary">{{ app.status }}</span>
+    <span class="badge bg-primary">{{app.status}}</span>
 </td>
                 </td>
                 <td>
@@ -65,12 +65,12 @@
 
 {% else %}
     <div class="alert alert-info">
-        No applications received yet.
+        No applications have been submitted for this drive yet.
     </div>
 {% endif %}
 
 <a href="{{ url_for('company_dashboard') }}" class="btn btn-secondary mt-3">
-    Back to Dashboard
+    Return to Dashboard
 </a>
 
 {% endblock %}
